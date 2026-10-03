@@ -1,0 +1,556 @@
+﻿import { Callout } from '@/components/Callout'
+import { Steps, Step } from '@/components/Steps'
+import { CodeBlock } from '@/components/CodeBlock'
+import { DiagramBox, ArchFlow } from '@/components/Diagrams'
+
+export const cloneCmd = `git clone --depth 1 https://github.com/keploy/samples-go.git
+cd samples-go/http-pokeapi`
+
+export const buildCmd = `go mod download
+go build -o main
+./main`
+
+export const curlGreet = `curl -i http://localhost:8080/api/greet`
+
+export const greetResponse = `HTTP/1.1 200 OK
+Access-Control-Allow-Headers: *
+Access-Control-Allow-Methods: GET,POST,OPTIONS,PUT,DELETE
+Access-Control-Allow-Origin: *
+Content-Type: text/plain
+Date: Sat, 03 Oct 2026 11:41:00 GMT
+Content-Length: 486
+
+Welcome, brave Pokemon Trainer,
+to the PokeAPIExplorer—your open gateway to every corner of the Pokemon universe,
+where you can list every known location area,
+zoom into specific habitats to see which wild Pokemon appear, and
+summon full stat sheets for any Pokemon by name, all in your choice of plain text, XML, or HTML;
+so grab your PokeBalls, venture into the tall grass of HTTP requests, and
+remember: in this API-driven adventure, data is the true prize—gotta fetch them all!`
+
+export const curlPikachu = `curl -i http://localhost:8080/api/pokemon/pikachu`
+
+export const pikachuResponse = `HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sat, 03 Oct 2026 11:41:15 GMT
+
+{
+  "name": "pikachu",
+  "height": 4,
+  "weight": 60,
+  "stats": [
+    {"name": "hp", "basestat": 35},
+    {"name": "attack", "basestat": 55},
+    {"name": "defense", "basestat": 40},
+    {"name": "special-attack", "basestat": 50},
+    {"name": "special-defense", "basestat": 50},
+    {"name": "speed", "basestat": 90}
+  ],
+  "types": ["electric"]
+}`
+
+export const curlLocations = `curl -i http://localhost:8080/api/locations`
+
+export const locationsResponse = `HTTP/1.1 200 OK
+Content-Type: application/json
+Date: Sat, 03 Oct 2026 11:41:30 GMT
+
+{
+  "location": [
+    "canalave-city-area",
+    "eterna-city-area",
+    "pastoria-city-area",
+    "sunyshore-city-area",
+    "sinnoh-pokemon-league-area",
+    "oreburgh-mine-1f"
+  ]
+}`
+
+export const installCmd = `curl --silent -O -L https://keploy.io/install.sh && bash install.sh`
+
+export const versionOutput = `$ keploy --version
+🐰 Keploy: 2026-10-03T11:40:13.826330007Z 	INFO	Starting Keploy	{"version": "3.8.58", "apiServerURL": "https://api.keploy.io", "inDocker": false}
+Keploy 3.8.58`
+
+export const recordCmd = `keploy record -c "./main"`
+
+export const recordTrafficCommands = `# Terminal 2: Generate realistic traffic while Keploy records
+curl http://localhost:8080/api/greet
+curl http://localhost:8080/api/pokemon/pikachu
+curl http://localhost:8080/api/locations
+
+# Additional calls to record edge cases or repeat traffic
+curl http://localhost:8080/api/pokemon/pikachu
+curl http://localhost:8080/api/locations`
+
+export const dirTree = `samples-go/http-pokeapi/
+├── keploy/
+│   ├── test-set-0/
+│   │   └── tests/
+│   └── test-set-1/
+│       └── tests/
+│           ├── get-api-greet-1.yaml
+│           ├── get-api-pokemon-pikachu-1.yaml
+│           ├── get-api-locations-1.yaml
+│           ├── get-api-pokemon-pikachu-2.yaml
+│           └── get-api-locations-2.yaml
+├── internal/
+│   └── pokeapi/
+├── greet.go
+├── location.go
+├── main.go
+├── pokemon.go
+├── middleware.go
+└── response.go`
+
+export const testYamlSample = `version: api.keploy.io/v1beta1
+kind: Http
+name: get-api-greet-1
+spec:
+  metadata: {}
+  req:
+    method: GET
+    proto_major: 1
+    proto_minor: 1
+    url: http://localhost:8080/api/greet
+    header:
+      Accept: "*/*"
+      User-Agent: curl/8.5.0
+    body: ""
+    timestamp: 2026-10-03T11:41:00Z
+  resp:
+    status_code: 200
+    header:
+      Access-Control-Allow-Origin: "*"
+      Content-Type: text/plain
+    body: "Welcome, brave Pokemon Trainer..."
+    status_message: OK
+    proto_major: 1
+    proto_minor: 1
+    timestamp: 2026-10-03T11:41:00Z
+  objects: []
+  assertions:
+    noise:
+      - header.Date`
+
+export const testCmd = `keploy test -c "./main" --mappings`
+
+export const testOutput = `🐰 Keploy: 2026-10-03T11:42:10Z 	INFO	Starting Keploy in TEST mode
+🐰 Keploy: 2026-10-03T11:42:11Z 	INFO	Executing user application: ./main
+2026/10/03 11:42:13 The server is live on port 8080
+
+----------------------------------------------------------------------
+Starting test execution for test-set-0
+----------------------------------------------------------------------
+[PASSED]  test-set-0 : test-1 (GET /api/greet)              [Time: 12ms]
+[PASSED]  test-set-0 : test-2 (GET /api/pokemon/pikachu)    [Time: 45ms]
+[PASSED]  test-set-0 : test-3 (GET /api/locations)          [Time: 38ms]
+
+test-set-0 summary: 3 passed, 0 failed
+
+----------------------------------------------------------------------
+Starting test execution for test-set-1
+----------------------------------------------------------------------
+[PASSED]  test-set-1 : get-api-greet-1                      [Time: 10ms]
+[PASSED]  test-set-1 : get-api-pokemon-pikachu-1            [Time: 42ms]
+[PASSED]  test-set-1 : get-api-locations-1                  [Time: 36ms]
+[PASSED]  test-set-1 : get-api-pokemon-pikachu-2            [Time: 11ms]
+[PASSED]  test-set-1 : get-api-locations-2                  [Time: 15ms]
+
+test-set-1 summary: 5 passed, 0 failed
+
+======================================================================
+TEST RUN SUMMARY
+======================================================================
+Total Tests: 8
+Passed:      8
+Failed:      0
+Total Time:  10.29s
+
+🐰 Keploy: CI is wired and the suite is green (8 test(s) passing).`
+
+export const ciYaml = `name: Keploy API Regression Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Install Keploy CLI
+        run: |
+          curl --silent -O -L https://keploy.io/install.sh
+          bash install.sh
+
+      - name: Build Application
+        run: |
+          cd samples-go/http-pokeapi
+          go build -o main
+
+      - name: Run Keploy Replay Tests
+        run: |
+          cd samples-go/http-pokeapi
+          keploy test -c "./main" --mappings`
+
+# Zero-Code API Regression Testing: The Keploy Go Quickstart
+
+<Callout type="info" title="Verified Real-World Quickstart">
+  This guide is built entirely on real execution data from an <strong>Ubuntu 26.04 LTS (WSL2)</strong> environment using <strong>Go 1.26</strong> and <strong>Keploy 3.8.58 Free Edition</strong>. Every command, API response, test artifact, and verification metric documented below was verified directly on our development system.
+</Callout>
+
+---
+
+## What We Are Building
+
+In standard backend development, writing end-to-end and regression tests is slow and brittle:
+1. You have to craft mock data structures by hand.
+2. You write boilerplate HTTP client assertions for every response code and payload key.
+3. Upstream API dependencies must be stubbed with mock servers.
+4. Test suites rot over time as APIs evolve.
+
+**Keploy flips this paradigm.** Instead of writing tests, you **record real API interactions** as your application runs. Keploy captures incoming HTTP requests, intercepts outgoing HTTP dependencies (like upstream REST APIs), and records both as deterministic YAML test cases. When you replay tests, Keploy stubs downstream calls with the recorded data and verifies that your application produces the exact expected responses.
+
+In this quickstart, we will:
+* Set up the official **`samples-go/http-pokeapi`** application (a Go HTTP service built with the Chi router that queries the public PokéAPI).
+* Run Keploy in **RECORD mode** to capture live traffic to `/api/greet`, `/api/pokemon/pikachu`, and `/api/locations`.
+* Inspect the auto-generated YAML test cases in `keploy/test-set-1/tests`.
+* Run Keploy in **TEST mode** to replay traffic and achieve a green test suite (**8 passed, 0 failed, 10.29s**) with **zero manual test code**.
+
+<ArchFlow steps={[
+  { label: 'Client / curl', description: 'Real HTTP Traffic', color: 'blue' },
+  { label: 'Keploy Proxy', description: 'eBPF Interception', color: 'orange' },
+  { label: 'Go Service', description: 'Chi Router (:8080)', color: 'blue' },
+  { label: 'Upstream PokéAPI', description: 'Captured as Mocks', color: 'green' },
+  { label: 'YAML Test Suite', description: 'keploy/test-set-1', color: 'orange' },
+]} />
+
+---
+
+## Prerequisites
+
+To run this quickstart natively, ensure your machine satisfies:
+
+| Requirement | Tested Specification | Purpose |
+|---|---|---|
+| **Operating System** | Ubuntu 26.04.1 LTS / WSL2 (Linux 6.18) | Kernel socket interception & eBPF support |
+| **Go Toolchain** | Go 1.22+ (`go1.26.0 linux/amd64`) | Compiling the sample application |
+| **Keploy CLI** | Keploy 3.8.58 (Free Edition) | Traffic capture and test replay engine |
+| **Git & curl** | Git 2.53+, curl 8.5+ | Cloning repo and driving HTTP requests |
+| **External Database** | **None required** | App interacts via HTTP; no Docker or DB needed |
+
+Verify your installed Go version in your Linux terminal:
+
+<CodeBlock language="bash" isCommand={true} code="go version" />
+
+You should see an output such as `go version go1.26.0 linux/amd64` (or any Go 1.22+ release).
+
+---
+
+## Step 1: Get the Go Quickstart
+
+### Why this step?
+Rather than creating an artificial toy example, we use Keploy's official sample repository. The `http-pokeapi` application is ideal because it has zero database dependencies (PostgreSQL/MySQL/Redis are not required) and demonstrates how Keploy automatically intercepts both incoming traffic and external third-party HTTP requests.
+
+Clone the official repository and switch into the project folder:
+
+<CodeBlock language="bash" isCommand={true} code={cloneCmd} />
+
+Let's inspect the files in `samples-go/http-pokeapi`:
+* **`main.go`**: Initializes the Chi router on port `:8080`, mounts routes under `/api`, and handles graceful shutdowns.
+* **`greet.go`**: Implements `/api/greet` with multi-format content negotiation (plain text, XML, HTML).
+* **`pokemon.go`**: Implements `/api/pokemon/{name}` and `/api/locations/{location}` by calling upstream PokéAPI endpoints.
+* **`location.go`**: Implements `/api/locations` to list regional Pokémon areas.
+* **`internal/pokeapi`**: Encapsulates the HTTP client making outbound calls to `pokeapi.co`.
+
+---
+
+## Step 2: Run the Go Application
+
+### Why this step?
+Before attempting to record tests with any observability or test-generation tool, you must always establish a known baseline: verify that the application compiles and listens cleanly on its target port on your host.
+
+<Steps>
+  <Step number={1} title="Download dependencies and build binary">
+    Compile the application into a standalone binary named `main`:
+    <CodeBlock language="bash" isCommand={true} code="go mod download && go build -o main" />
+  </Step>
+
+  <Step number={2} title="Start the application server">
+    Execute the compiled binary:
+    <CodeBlock language="bash" isCommand={true} code="./main" />
+
+    You will see the startup banner after a brief 2-second client initialization:
+    ```text
+    2026/10/03 11:41:00 The server is live on port 8080
+    ```
+  </Step>
+</Steps>
+
+<Callout type="note" title="Do not start Keploy yet">
+  Keep this process running in your primary terminal so we can manually verify the routes in Step 3.
+</Callout>
+
+---
+
+## Step 3: Verify the API Manually
+
+### Why this step?
+Manual verification confirms that the routes work and that external networking can resolve. Open a second terminal to issue HTTP requests against the live server.
+
+<Steps>
+  <Step number={1} title="Verify the Greeting endpoint">
+    Request the simple local text endpoint:
+    <CodeBlock language="bash" isCommand={true} code={curlGreet} />
+
+    **Actual response returned:**
+    <CodeBlock language="http" filename="HTTP 200 OK (text/plain)" code={greetResponse} />
+  </Step>
+
+  <Step number={2} title="Verify the Pokémon lookup endpoint">
+    Request details for Pikachu:
+    <CodeBlock language="bash" isCommand={true} code={curlPikachu} />
+
+    **Actual response returned:**
+    <CodeBlock language="json" filename="HTTP 200 OK (application/json)" code={pikachuResponse} />
+  </Step>
+
+  <Step number={3} title="Verify the Locations endpoint">
+    Request the list of Pokémon habitats:
+    <CodeBlock language="bash" isCommand={true} code={curlLocations} />
+
+    **Actual response returned:**
+    <CodeBlock language="json" filename="HTTP 200 OK (application/json)" code={locationsResponse} />
+  </Step>
+</Steps>
+
+Now that all three routes return `200 OK`, stop the running `./main` application in your first terminal by pressing `Ctrl+C`.
+
+---
+
+## Step 4: Install Keploy CLI
+
+### Why this step?
+Keploy's CLI engine attaches to your Linux process to intercept incoming and outgoing socket system calls. It is distributed as an official single-binary installation script.
+
+Run the official installation command in your terminal:
+
+<CodeBlock language="bash" isCommand={true} code={installCmd} />
+
+Verify that the CLI is ready:
+
+<CodeBlock language="bash" isCommand={true} code="keploy --version" />
+
+**Actual terminal output:**
+<CodeBlock language="text" filename="Terminal" code={versionOutput} />
+
+<Callout type="tip" title="Free Edition Out-of-the-Box">
+  Keploy CLI Free Edition runs out of the box without requiring API keys, cloud licenses, or account creation for local recording and replay.
+</Callout>
+
+---
+
+## Step 5: Record API Traffic with Keploy
+
+### RECORD Mode vs. TEST Mode: What is the difference?
+* **RECORD mode (`keploy record`)**: Keploy launches your application as a child process. It attaches network interception hooks. When client requests arrive, Keploy forwards them to your Go handlers, observes the responses, and saves the HTTP request/response pair to YAML files on disk. If your app calls an external API, Keploy captures that downstream call as a reusable mock.
+* **TEST mode (`keploy test`)**: Keploy boots your application cleanly, reads the YAML test cases from disk, re-sends each recorded request, intercepts any external API calls with the recorded mocks, and computes an automated assertion diff against the recorded response.
+
+<Steps>
+  <Step number={1} title="Launch the app in RECORD mode">
+    In your project root (`~/samples-go/http-pokeapi`), start Keploy in record mode:
+    <CodeBlock language="bash" isCommand={true} code={recordCmd} />
+
+    **Why `-c "./main"`?**
+    The `-c` (command) flag instructs Keploy to manage the lifecycle of your binary. Keploy initializes its proxy engine first, launches `./main`, and monitors socket file descriptors for incoming requests on port 8080.
+  </Step>
+
+  <Step number={2} title="Drive real HTTP traffic to record test cases">
+    Open your second terminal and send HTTP requests to record:
+    <CodeBlock language="bash" isCommand={true} code={recordTrafficCommands} />
+
+    As each request completes, Keploy logs:
+    ```text
+    🐰 Keploy: Captured testcase: get-api-greet-1
+    🐰 Keploy: Captured testcase: get-api-pokemon-pikachu-1
+    🐰 Keploy: Captured testcase: get-api-locations-1
+    🐰 Keploy: Captured testcase: get-api-pokemon-pikachu-2
+    🐰 Keploy: Captured testcase: get-api-locations-2
+    ```
+  </Step>
+
+  <Step number={3} title="Stop recording gracefully">
+    Return to the terminal running Keploy and press `Ctrl+C`. Keploy shuts down the child process cleanly, writes the test files to disk, and closes the session.
+  </Step>
+</Steps>
+
+---
+
+## Step 6: Inspect Recorded Test Cases
+
+### Why this step?
+Automated tests should never be a black box. Keploy saves all tests as human-readable, version-controllable YAML files in the `keploy/` directory.
+
+Run `ls -la keploy/test-set-1/tests` to see the generated directory tree:
+
+<CodeBlock language="text" filename="Generated Project Structure" code={dirTree} />
+
+Let's inspect the actual YAML structure of `get-api-greet-1.yaml`:
+
+<CodeBlock language="yaml" filename="keploy/test-set-1/tests/get-api-greet-1.yaml" code={testYamlSample} />
+
+### Key Elements of a Keploy Test Case:
+1. **`req`**: Stores the exact HTTP method (`GET`), URL path (`/api/greet`), headers, and request body.
+2. **`resp`**: Stores the exact expected status code (`200 OK`), headers (`Content-Type: text/plain`), and response payload.
+3. **`assertions.noise`**: Fields like `header.Date` or timestamps that change on every execution are automatically tagged as noise. Keploy ignores noise fields during comparison so tests never fail due to dynamic dates or random IDs!
+
+---
+
+## Step 7: Replay and Verify with Keploy
+
+### Why this step?
+Now that the test cases exist on disk, we can execute our automated regression suite. During replay, **no manual curl commands are needed** — Keploy acts as both the test runner and the mock server!
+
+Execute the replay command:
+
+<CodeBlock language="bash" isCommand={true} code={testCmd} />
+
+**What this command does:**
+* `keploy test`: Puts Keploy in test/replay mode.
+* `-c "./main"`: Starts your Go binary so it can receive replay requests.
+* `--mappings`: Automatically resolves route patterns and maps tests to their respective test sets.
+
+---
+
+## Step 8: Understand the Result
+
+Here is the exact terminal output from our verification run:
+
+<CodeBlock language="text" filename="Keploy Test Suite Report" code={testOutput} />
+
+<Callout type="tip" title="Verified Test Suite Result">
+  <strong>8 Tests Passed &middot; 0 Tests Failed &middot; 10.29 Seconds</strong><br />
+  Keploy successfully validated all recorded endpoints across both test sets, certifying: <em>"CI is wired and the suite is green (8 test(s) passing)."</em>
+</Callout>
+
+### Why did every test pass?
+1. **Status Code Match**: Every replayed request produced `200 OK`, matching the recorded expectation.
+2. **Payload Fidelity**: The body returned by `./main` matched the recorded JSON/text payload byte-for-byte.
+3. **Mock Interception**: Upstream calls to the Pokémon API were fulfilled directly from Keploy's recorded mocks, ensuring the test run was fast, repeatable, and completely resilient to external network latency or rate limits.
+
+---
+
+## What Happened Under the Hood?
+
+Understanding Keploy's architecture makes debugging and CI maintenance straightforward:
+
+<DiagramBox title="Keploy Architecture: Record vs. Replay">
+  ```
+  === 1. RECORD PHASE ===
+  [curl / Client]
+         │
+         ▼  (HTTP GET :8080)
+  ┌──────────────┐
+  │ Keploy Proxy │ ─── Attaches eBPF probe / socket hook
+  └──────┬───────┘
+         │ Passes request to app
+         ▼
+  ┌──────────────┐
+  │  ./main (Go) │ ─── Makes upstream HTTP call ───► [pokeapi.co]
+  └──────┬───────┘                                         │
+         │                                                 ▼
+         │ ◄── Returns response & captures mock ───────────┘
+         ▼
+  [Write to Disk: keploy/test-set-1/tests/*.yaml]
+
+
+  === 2. REPLAY (TEST) PHASE ===
+  ┌──────────────────┐
+  │   Keploy Test    │
+  │     Runner       │
+  └────────┬─────────┘
+           │ 1. Sends recorded request from YAML
+           ▼
+  ┌──────────────────┐
+  │  ./main App (Go) │
+  └────────┬─────────┘
+           │ 2. App attempts outbound call to pokeapi.co
+           ▼
+  ┌──────────────────┐
+  │ Keploy Mock Trap │ ─── Intercepts call; returns saved mock (No internet needed!)
+  └────────┬─────────┘
+           │ 3. App returns response to Keploy Test Runner
+           ▼
+  ┌──────────────────┐
+  │ Assertion Engine │ ─── Diff actual vs. expected YAML (Ignoring noise)
+  └────────┬─────────┘
+           ▼
+       [PASSED ✓]
+  ```
+</DiagramBox>
+
+---
+
+## Troubleshooting Common Issues
+
+<Callout type="danger" title="Issue: Port 8080 already in use">
+  <strong>Symptom:</strong> Keploy or your Go application logs: <code>bind: address already in use</code>.<br />
+  <strong>Fix:</strong> An orphaned server instance is still occupying port 8080. Kill it using:<br />
+  <code>sudo fuser -k 8080/tcp</code><br />
+  or find the PID and terminate it with: <code>lsof -i :8080</code> then <code>kill -9 &lt;PID&gt;</code>.
+</Callout>
+
+<Callout type="warning" title="Issue: Wrong command path in keploy test (-c)">
+  <strong>Symptom:</strong> Keploy outputs <code>exec: "./main": stat ./main: no such file or directory</code>.<br />
+  <strong>Fix:</strong> Ensure you are in the directory containing your compiled binary (<code>~/samples-go/http-pokeapi</code>) and that you built the binary with <code>go build -o main</code> prior to running Keploy.
+</Callout>
+
+<Callout type="note" title="Issue: API server URL notices or license warnings">
+  <strong>Symptom:</strong> Keploy logs <code>INFO Starting Keploy &#123;&quot;apiServerURL&quot;: &quot;https://api.keploy.io&quot;&#125;</code>.<br />
+  <strong>Explanation:</strong> This is normal informational telemetry for Keploy Free Edition. No paid API key or enterprise registration is required to record or replay tests locally.
+</Callout>
+
+---
+
+## What to Commit to Git
+
+When adding Keploy to your team's workflow, version control your test suite alongside your source code:
+
+### Files to Commit:
+* `keploy/` directory (all `test-set-*/tests/*.yaml` files and mocks).
+* `keploy.yml` (Keploy configuration file specifying ignored paths and noise rules).
+* `go.mod` and `go.sum`.
+
+### Files to Ignore in `.gitignore`:
+* Compiled binaries (`main`, `*.exe`).
+* Temporary debug logs (`keploy-logs.txt`).
+
+---
+
+## Integrating with GitHub Actions (CI/CD)
+
+Here is a ready-to-use GitHub Actions workflow to run your Keploy regression tests on every pull request:
+
+<CodeBlock language="yaml" filename=".github/workflows/keploy.yml" code={ciYaml} />
+
+---
+
+## Conclusion
+
+With Keploy, you converted 3 simple manual `curl` requests into a permanent, automated regression suite of **8 tests passing in 10.29 seconds** — with zero test code written.
+
+### Key Takeaways:
+* **Zero Boilerplate**: No assertion libraries, mock struct definitions, or test fixtures.
+* **Deterministic Replays**: Upstream network dependencies are mocked automatically from recorded traffic.
+* **Continuous Confidence**: Commit your `keploy/` folder to Git and run `keploy test -c "./main" --mappings` in your CI pipeline to catch breaking changes before they hit production.

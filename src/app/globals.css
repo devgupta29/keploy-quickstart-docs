@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/* ============================================
+   Design Tokens
+   ============================================ */
+:root {
+  --font-inter: 'Inter', system-ui, sans-serif;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-inter, system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Scrollbar Styling
+   ============================================ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-900;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-600;
+}
+
+/* ============================================
+   Selection
+   ============================================ */
+::selection {
+  @apply bg-orange-200 dark:bg-orange-900/50 text-orange-900 dark:text-orange-100;
+}
+
+/* ============================================
+   Focus Ring
+   ============================================ */
+:focus-visible {
+  @apply outline-2 outline-orange-500 outline-offset-2;
+}
+
+/* ============================================
+   Prose / MDX Content Styling
+   ============================================ */
+
+/* Ensure scroll offset works for anchor links under sticky header */
+[id] {
+  scroll-margin-top: 6rem;
+}
+
+/* Code inside pre blocks */
+pre code {
+  font-size: 0.875rem;
+  background: transparent !important;
+  padding: 0 !important;
+  color: inherit !important;
+}
+
+/* Terminal/command highlighting */
+.terminal-line::before {
+  content: '$ ';
+  @apply text-green-400 select-none;
+}
