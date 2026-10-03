@@ -30,27 +30,27 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20">
           <div className="max-w-3xl">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-950/50 border border-orange-200 dark:border-orange-800 mb-6">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-950/50 border border-orange-200 dark:border-orange-800 mb-6 max-w-full">
+              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shrink-0" />
               <span className="text-xs font-medium text-orange-700 dark:text-orange-400">
                 Keploy DevRel Tutorial · Go Quickstart
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-white mb-6 leading-tight">
               Testing Without{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
                 Writing Tests
               </span>
             </h1>
 
-            <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
+            <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
               A real-world guide to using Keploy with a Go application — automatically record real
               API calls and replay them as regression tests. Zero test code required.
             </p>
 
             {/* Meta info */}
-            <div className="flex flex-wrap gap-4 sm:gap-6 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex flex-wrap gap-3 sm:gap-6 text-sm text-gray-600 dark:text-gray-400">
               <div className="flex items-center gap-2">
                 <span className="font-mono bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded text-xs font-semibold">Go 1.26</span>
                 <span>Chi + PokéAPI</span>

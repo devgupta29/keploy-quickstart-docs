@@ -77,7 +77,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       // Inline code (no language class)
       if (!className) {
         return (
-          <code className="bg-gray-100 dark:bg-gray-800 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded text-sm font-mono">
+          <code className="bg-gray-100 dark:bg-gray-800 text-orange-600 dark:text-orange-400 px-1.5 py-0.5 rounded text-sm font-mono break-words">
             {children}
           </code>
         )
@@ -85,11 +85,31 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       return <code className={className}>{children}</code>
     },
     pre: ({ children }) => (
-      <div className="relative my-6 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+      <div className="relative my-6 w-full min-w-0 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
         <pre className="overflow-x-auto p-4 bg-gray-950 text-gray-100 text-sm font-mono leading-6">
           {children}
         </pre>
       </div>
+    ),
+    table: ({ children }) => (
+      <div className="my-6 w-full overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-800 shadow-xs">
+        <table className="w-full text-left text-sm border-collapse min-w-[500px] sm:min-w-full">{children}</table>
+      </div>
+    ),
+    thead: ({ children }) => (
+      <thead className="bg-gray-50 dark:bg-gray-900/60 border-b border-gray-200 dark:border-gray-800 text-gray-900 dark:text-gray-100 font-semibold">{children}</thead>
+    ),
+    tbody: ({ children }) => (
+      <tbody className="divide-y divide-gray-100 dark:divide-gray-800/60 text-gray-700 dark:text-gray-300">{children}</tbody>
+    ),
+    tr: ({ children }) => (
+      <tr className="hover:bg-gray-50/50 dark:hover:bg-gray-900/30 transition-colors">{children}</tr>
+    ),
+    th: ({ children }) => (
+      <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400 whitespace-nowrap">{children}</th>
+    ),
+    td: ({ children }) => (
+      <td className="px-4 py-3 text-sm leading-6 align-top">{children}</td>
     ),
     hr: () => <hr className="my-8 border-gray-200 dark:border-gray-700" />,
     strong: ({ children }) => (

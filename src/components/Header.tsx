@@ -5,11 +5,21 @@ import Link from 'next/link'
 import { Sun, Moon, Menu, X, BookOpen } from 'lucide-react'
 import { useTheme } from 'next-themes'
 
-const navLinks = [
+const desktopNavLinks = [
   { href: '#what-we-are-building', label: 'Overview' },
   { href: '#step-1-get-the-go-quickstart', label: 'Quickstart' },
   { href: '#step-5-record-api-traffic-with-keploy', label: 'Record' },
   { href: '#step-7-replay-and-verify-with-keploy', label: 'Replay' },
+  { href: 'https://keploy.io/docs', label: 'Official Docs ↗', external: true },
+]
+
+const mobileNavLinks = [
+  { href: '#what-we-are-building', label: 'Overview' },
+  { href: '#prerequisites', label: 'Prerequisites' },
+  { href: '#step-1-get-the-go-quickstart', label: 'Step 1: Get Quickstart' },
+  { href: '#step-5-record-api-traffic-with-keploy', label: 'Step 5: Record Traffic' },
+  { href: '#step-7-replay-and-verify-with-keploy', label: 'Step 7: Replay & Verify' },
+  { href: '#troubleshooting-common-issues', label: 'Troubleshooting' },
   { href: 'https://keploy.io/docs', label: 'Official Docs ↗', external: true },
 ]
 
@@ -34,7 +44,7 @@ export function Header() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-6">
-            {navLinks.map(({ href, label, external }) => (
+            {desktopNavLinks.map(({ href, label, external }) => (
               <a
                 key={href}
                 href={href}
@@ -48,11 +58,11 @@ export function Header() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {mounted && (
               <button
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="w-11 h-11 flex items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 aria-label="Toggle dark mode"
               >
                 {theme === 'dark' ? (
@@ -63,7 +73,7 @@ export function Header() {
               </button>
             )}
             <button
-              className="md:hidden p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="md:hidden w-11 h-11 flex items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle mobile menu"
             >
@@ -74,15 +84,15 @@ export function Header() {
 
         {/* Mobile nav */}
         {mobileOpen && (
-          <div className="md:hidden border-t border-gray-100 dark:border-gray-800 py-3 space-y-1">
-            {navLinks.map(({ href, label, external }) => (
+          <div className="md:hidden border-t border-gray-100 dark:border-gray-800 py-3 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
+            {mobileNavLinks.map(({ href, label, external }) => (
               <a
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
                 target={external ? '_blank' : undefined}
                 rel={external ? 'noopener noreferrer' : undefined}
-                className="block px-3 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                className="block px-3 py-2.5 rounded-md text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 {label}
               </a>

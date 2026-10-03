@@ -36,7 +36,7 @@ export function Step({ number, title, children }: StepProps) {
       </div>
 
       {/* Step content */}
-      <div className="flex-1 pt-1.5 pb-2">
+      <div className="flex-1 min-w-0 pt-1.5 pb-2">
         <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-2">
           {title}
         </h3>

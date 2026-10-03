@@ -18,7 +18,7 @@ export function DiagramBox({ title, children }: DiagramBoxProps) {
           </p>
         </div>
       )}
-      <div className="p-6 bg-white dark:bg-gray-900 font-mono text-sm text-gray-700 dark:text-gray-300 overflow-x-auto">
+      <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 font-mono text-sm text-gray-700 dark:text-gray-300 overflow-x-auto">
         {children}
       </div>
     </div>
@@ -30,16 +30,17 @@ interface ArchFlowProps {
 }
 
 /**
- * A horizontal flow diagram showing how components interact.
+ * A responsive flow diagram showing how components interact.
+ * Uses a vertical flow with downward arrows on mobile, and horizontal flow on larger screens.
  */
 export function ArchFlow({ steps }: ArchFlowProps) {
   return (
-    <div className="my-8 flex flex-wrap items-center justify-center gap-2">
+    <div className="my-8 flex flex-col md:flex-row items-center justify-center gap-2">
       {steps.map((step, i) => (
-        <div key={i} className="flex items-center gap-2">
-          <div className="flex flex-col items-center">
+        <div key={i} className="flex flex-col md:flex-row items-center gap-2 w-full md:w-auto">
+          <div className="flex flex-col items-center w-full md:w-auto">
             <div
-              className={`px-4 py-2.5 rounded-lg border-2 text-center min-w-[100px] ${
+              className={`w-full md:w-auto px-4 py-2.5 rounded-lg border-2 text-center min-w-[120px] ${
                 step.color === 'orange'
                   ? 'border-orange-400 bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-300'
                   : step.color === 'green'
@@ -54,8 +55,9 @@ export function ArchFlow({ steps }: ArchFlowProps) {
             </div>
           </div>
           {i < steps.length - 1 && (
-            <div className="text-gray-400 dark:text-gray-600 font-mono text-lg select-none">
-              →
+            <div className="text-gray-400 dark:text-gray-600 font-mono text-base md:text-lg select-none my-0.5 md:my-0">
+              <span className="md:hidden">↓</span>
+              <span className="hidden md:inline">→</span>
             </div>
           )}
         </div>

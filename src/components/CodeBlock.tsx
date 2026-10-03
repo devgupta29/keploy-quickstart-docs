@@ -24,15 +24,15 @@ export function CodeBlock({ code, language = 'bash', filename, isCommand = false
   }
 
   return (
-    <div className="my-6 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
+    <div className="my-6 w-full min-w-0 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm">
       {/* Header bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between px-4 py-2.5 bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 gap-2">
+        <div className="flex items-center gap-2 min-w-0">
           {isCommand && (
-            <Terminal className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
+            <Terminal className="w-3.5 h-3.5 shrink-0 text-gray-500 dark:text-gray-400" />
           )}
           {filename ? (
-            <span className="text-xs font-medium text-gray-600 dark:text-gray-400 font-mono">
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-400 font-mono truncate">
               {filename}
             </span>
           ) : (
@@ -43,7 +43,7 @@ export function CodeBlock({ code, language = 'bash', filename, isCommand = false
         </div>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors px-2.5 py-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-700 shrink-0"
           aria-label="Copy code"
         >
           {copied ? (
@@ -61,7 +61,7 @@ export function CodeBlock({ code, language = 'bash', filename, isCommand = false
       </div>
 
       {/* Code content */}
-      <pre className="overflow-x-auto p-4 bg-gray-950 text-gray-100 text-sm font-mono leading-6 m-0">
+      <pre className="overflow-x-auto p-4 bg-gray-950 text-gray-100 text-sm font-mono leading-6 m-0 w-full">
         <code className={`language-${language}`}>{code.trim()}</code>
       </pre>
     </div>
